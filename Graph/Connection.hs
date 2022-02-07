@@ -13,7 +13,7 @@ import Graph
 
 -- Connection algorithms --
 
--- Obtener la componente conexa de un vértice del grafo
+-- Obtain the connected component of a vertex in the graph
 connectedComponent :: (Eq a, Eq b) => Graph a b -> Vertex a -> Graph a b
 connectedComponent g v = connectedComponentAux g [v] ([v],[])
 
@@ -26,7 +26,7 @@ connectedComponentAux g (v:vs) acc = connectedComponentAux g (vs++vs2) (vertices
             (\v -> not (elem v (vertices acc)) && not (elem v vs))
             (neighbours g v)
 
--- Obtener las componentes conexas del grafo
+-- Obtain all the connected components of the graph
 connectedComponents :: (Eq a, Eq b) => Graph a b -> [Graph a b]
 connectedComponents ([],[]) = []
 connectedComponents g = g1:connectedComponents (g -* g1)
@@ -34,7 +34,7 @@ connectedComponents g = g1:connectedComponents (g -* g1)
         v = head $ vertices g
         g1 = connectedComponent g v
 
--- Obtener la componente fuertemente conexa de un vértice del grafo
+-- Obtain the strongly connected component of a vertex in the digraph
 stronglyConnectedComponent :: (Eq a, Eq b) => Graph a b -> Vertex a -> Graph a b
 stronglyConnectedComponent g v = stronglyConnectedComponentAux g [v] ([v],[])
 
@@ -50,11 +50,11 @@ stronglyConnectedComponentAux g (v:vs) acc = stronglyConnectedComponentAux g (vs
 stronglyConnectedComponents :: (Eq a, Eq b) => Graph a b -> [Graph a b]
 stronglyConnectedComponents g = map (stronglyConnectedComponent g) (vertices g)
 
--- Comprobar si el grafo es conexo
+-- Check if a graph is connected
 isConnected :: (Eq a, Eq b) => Graph a b -> Bool
 isConnected g = length (vertices g) == length (vertices (connectedComponent g (head $ vertices g)))
 
--- Comprobar si el grafo es fuertemente conexo
+-- Check if a digraph is strongly connected
 isStronglyConnected :: (Eq a, Eq b) => Graph a b -> Bool
 isStronglyConnected g = all aux (vertices g)
     where

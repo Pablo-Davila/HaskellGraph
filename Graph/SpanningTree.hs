@@ -1,9 +1,9 @@
 
-module Graph.TreeCover (
-    treeCover,
-    forestCover,
-    minTreeCover,
-    minForestCover
+module Graph.SpanningTree (
+    spanningTree,
+    spanningForest,
+    minSpanningTree,
+    minSpanningForest
 ) where
 
 import Data.List (sortBy)
@@ -13,9 +13,9 @@ import Graph.Connection
 
 -- Tree cover algorithms --
 
--- Obtener un árbol recubridor
-treeCover :: (Eq a, Eq b) => Graph a b -> Graph a b
-treeCover g
+-- Get a spanning tree of a connected graph
+spanningTree :: (Eq a, Eq b) => Graph a b -> Graph a b
+spanningTree g
     | isConnected g = aux (vertices g) ([head (vertices g)],[])
     | otherwise = error "The graph must be connected"
     where
@@ -27,16 +27,16 @@ treeCover g
                 eOut = [e | e<-outEdges g v, not (elem (edgeTarget g e) (vacc++vIn))]
                 vOut = [edgeTarget g e | e<-eOut]
 
--- Buscar un bosque recubridor
-forestCover :: (Eq a, Eq b, Ord b) => Graph a b -> [Graph a b]
-forestCover g = [treeCover h | h<-connectedComponents g]
+-- Get a spanning forest a graph
+spanningForest :: (Eq a, Eq b, Ord b) => Graph a b -> [Graph a b]
+spanningForest g = [spanningTree h | h<-connectedComponents g]
 
 
--- Minimum weight tree cover algorithms --
+-- Minimum spanning tree algorithms --
 
--- Buscar un árbol recubridor de peso mínimo en un grafo conexo (algoritmo de Kruskal)
-minTreeCover :: (Eq a, Eq b, Ord b) => Graph a b -> Graph a b
-minTreeCover g
+-- Get a minimum spanning tree of a connected graph
+minSpanningTree :: (Eq a, Eq b, Ord b) => Graph a b -> Graph a b
+minSpanningTree g
     | isConnected g = graph (vertices g) treeEdges
     | otherwise = error "The graph must be connected"
     where
@@ -52,9 +52,9 @@ minTreeCover g
                 v2 = edgeTarget (vs,[e]) e
                 vsNew = [(id, if cc==vertexTag v2 then vertexTag v1 else cc) | (id,cc)<-vs]
 
--- Buscar un bosque recubridor de peso mínimo
-minForestCover :: (Eq a, Eq b, Ord b) => Graph a b -> [Graph a b]
-minForestCover g = [minTreeCover h | h<-connectedComponents g]
+-- Get a minimum spanning forest of a graph
+minSpanningForest :: (Eq a, Eq b, Ord b) => Graph a b -> [Graph a b]
+minSpanningForest g = [minSpanningTree h | h<-connectedComponents g]
 
 
 -- Utils --
