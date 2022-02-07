@@ -166,8 +166,8 @@ adjacencyMatrixDirected g = array ((1,1),(n,n)) [((i1,i2), tag v1 v2) | (i1,v1)<
         vs = vertices g
         n = length $ vertices g
         tag v1 v2 = case findEdgeDirected g v1 v2 of
-            Just e = Just (edgeTag e)
-            _ = Nothing
+            Just e -> Just (edgeTag e)
+            _ -> Nothing
 
 checkGraphIds :: Graph a b -> Bool
 checkGraphIds g = checkVertices && checkEdgesSource && checkEdgesTarget
